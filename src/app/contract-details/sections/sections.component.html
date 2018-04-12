@@ -1,0 +1,15 @@
+<div>
+  <ol>
+    <li *ngFor="let section of sections" [ngClass]="{'active': currentSection.id == section.id}" class="list-group-item" (click)="openQuestionFlows(section)">
+      <div class="row">
+        <div class="col">
+          <div class="progress">
+            <div class="w-100 progress-bar progress-bar-striped" role="progressbar" aria-valuenow="80" aria-valuemax="100">{{(section.completedQuestions / section.totalQuestions)*100 | number:'1.0-1'}}%</div>
+          </div>
+          <p>{{section.subName}}</p>
+          <p>{{section.name}}</p>
+        </div>
+      </div>
+    </li>
+  </ol>
+</div>

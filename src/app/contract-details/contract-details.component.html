@@ -1,0 +1,13 @@
+<div class="row border" style="height:85vh">
+  <div class="col border" style="overflow:auto">
+    <app-sections></app-sections>
+  </div>
+  <div class="col border" style="overflow:auto">
+    <app-question-flows></app-question-flows>
+  </div>
+  <div class="col border" style="overflow:auto">
+    <app-question-form></app-question-form>
+  </div>
+</div>
+<button type="button" class="btn btn-primary" (click)="previousQuestion($event)">Previous question</button>
+<button type="button" class="btn btn-primary" (click)="nextQuestion($event)">Next question</button>
