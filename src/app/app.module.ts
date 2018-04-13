@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 
 import { AppComponent } from './app.component';
 import { ContractDetailsComponent } from './contract-details/contract-details.component';
@@ -15,7 +16,8 @@ import { RouterState } from './shared/store/router.state';
     BrowserModule,
     AppRoutingModule,
     NgxsModule.forRoot([RouterState]),
-    NgxsReduxDevtoolsPluginModule.forRoot()
+    NgxsReduxDevtoolsPluginModule.forRoot(),
+    NgxsLoggerPluginModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

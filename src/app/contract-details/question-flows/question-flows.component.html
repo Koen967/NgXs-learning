@@ -1,20 +1,15 @@
-<!-- <div>
+<div>
   <ol>
-    <li *ngFor="let questionFlow of parentFlows" [ngClass]="{'active': currentQuestionFlow.id == questionFlow.id}" class="list-group-item"
-      (click)="$event.stopPropagation();openQuestionFlowForm(questionFlow)">
-      <div *ngIf="questionFlow.completed == true" class="row alert alert-success">
+    <li *ngFor="let questionFlow of parentFlows$ | async" class="list-group-item" (click)="$event.stopPropagation();openQuestionFlowForm(questionFlow)">
+      <div *ngIf="questionFlow.completed == true" class="row alert" [ngClass]="{'alert-success': questionFlow.completed == true, 'alert-danger': questionFlow.completed == false}">
         <div class="col">
           <p>{{questionFlow.question}}</p>
         </div>
       </div>
-      <div *ngIf="questionFlow.completed == false" class="row alert alert-danger">
-        <div class="col">
-          <p>{{questionFlow.question}}</p>
-        </div>
-      </div>
-      <app-question-flows *ngIf="questionFlow.questionFlows.length > 0 && questionFlow.showSubQuestionOn === questionFlow.answer"></app-question-flows>
+      <!-- <app-question-flows *ngIf="questionFlow.questionFlows.length > 0 && questionFlow.showSubQuestionOn === questionFlow.answer"></app-question-flows> -->
     </li>
   </ol>
 </div>
- -->
-<p>QuestionFlows</p>
+
+<p>{{currentSection$ | async}}</p>
+<p>{{test$ | async}}</p>

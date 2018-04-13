@@ -2,6 +2,8 @@ import { ContractDetail } from '../../contract-details.model';
 
 export class GetContractDetails {
   static readonly type = '[CONTRACT DETAILS] Get contract details';
+
+  constructor(public id: number) {}
 }
 
 export class GetContractDetailsSuccess {
@@ -12,9 +14,6 @@ export class GetContractDetailsSuccess {
 
 export class GetContractDetailsFailed {
   static readonly type = '[CONTRACT DETAILS] Get contract details failed';
-}
 
-export type ContractDetailActionsAll =
-  | GetContractDetails
-  | GetContractDetailsSuccess
-  | GetContractDetailsFailed;
+  constructor(public error: any) {}
+}

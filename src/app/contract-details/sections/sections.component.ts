@@ -1,15 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+
+import { Store, Select } from '@ngxs/store';
+import { SectionsState } from '../store/states';
+import * as SectionActions from '../store/actions/sections.actions';
+import * as QuestionFlowActions from '../store/actions/question-flows.actions';
+
+import { Section } from '../contract-details.model';
 
 @Component({
   selector: 'app-sections',
   templateUrl: './sections.component.html',
-  styleUrls: ['./sections.component.css']
+  styleUrls: ['./sections.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SectionsComponent implements OnInit {
+  @Select(SectionsState.getSectionsArray) sections$: Observable<Section[]>;
 
-  constructor() { }
+  constructor(private store: Store) {}
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  openQuestionFlows(section: Section) {
+    this.store.dispatch(new QuestionFlowActions.SetCurrentSection(section));
   }
-
 }

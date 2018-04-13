@@ -3,7 +3,11 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 
 import { NgxsModule } from '@ngxs/store';
-import { ContractDetailsState } from './store/states';
+import {
+  ContractDetailsState,
+  SectionsState,
+  QuestionFlowsState
+} from './store/states';
 import { ContractDetailsRoutingModule } from './contract-details-routing.module';
 
 import { QuestionFlowsComponent } from './question-flows/question-flows.component';
@@ -16,7 +20,11 @@ import { ContractDetailsService } from './contract-details.service';
 @NgModule({
   imports: [
     CommonModule,
-    NgxsModule.forFeature([ContractDetailsState]),
+    NgxsModule.forFeature([
+      ContractDetailsState,
+      SectionsState,
+      QuestionFlowsState
+    ]),
     ContractDetailsRoutingModule,
     HttpClientModule
   ],

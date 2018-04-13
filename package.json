@@ -22,6 +22,7 @@
     "@angular/platform-browser-dynamic": "^5.2.0",
     "@angular/router": "^5.2.0",
     "@ngxs/devtools-plugin": "^2.1.0-beta.9",
+    "@ngxs/logger-plugin": "^3.0.0-rc.1",
     "@ngxs/store": "^2.1.0-beta.9",
     "core-js": "^2.4.1",
     "normalizr": "^3.2.4",

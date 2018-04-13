@@ -1,14 +1,18 @@
 import { State, Action, StateContext, Selector } from '@ngxs/store';
+import * as ContractDetailsActions from '../actions/contract-details.actions';
+
 import {
   ContractDetail,
   contractDetailsSchema
 } from '../../contract-details.model';
-import * as ContractDetailsActions from '../actions/contract-details.actions';
 import { normalize } from 'normalizr';
+
 import { ContractDetailsService } from '../../contract-details.service';
+import { catchError, map } from 'rxjs/operators';
+import { of } from 'rxjs/observable/of';
 
 export class ContractDetailsStateModel {
-  contractDetails: { [id: string]: ContractDetail };
+  contractDetails: { [id: number]: ContractDetail };
   loading: boolean;
   loaded: boolean;
 }
@@ -24,21 +28,47 @@ export class ContractDetailsStateModel {
 export class ContractDetailsState {
   constructor(private contractDetailsService: ContractDetailsService) {}
 
+  //#region Selectors
+  @Selector()
+  static getContractDetailsLoaded(state: ContractDetailsStateModel) {
+    return state.loaded;
+  }
+  //#endregion Selectors
+
+  //#region Reducer
   @Action(ContractDetailsActions.GetContractDetails)
-  getContractDetails({ patchState }: StateContext<ContractDetailsStateModel>) {
+  getContractDetails(
+    { patchState, dispatch }: StateContext<ContractDetailsStateModel>,
+    { id }: ContractDetailsActions.GetContractDetails
+  ) {
     patchState({
       loading: true
     });
+
+    return this.contractDetailsService
+      .getContractDetailsFromId(id)
+      .pipe(
+        map(contractDetails =>
+          dispatch(
+            new ContractDetailsActions.GetContractDetailsSuccess(
+              contractDetails
+            )
+          )
+        ),
+        catchError(error =>
+          dispatch(new ContractDetailsActions.GetContractDetailsFailed(error))
+        )
+      );
   }
 
   @Action(ContractDetailsActions.GetContractDetailsSuccess)
   getContractDetailsSuccess(
-    { patchState }: StateContext<ContractDetailsStateModel>,
+    { setState }: StateContext<ContractDetailsStateModel>,
     { contractDetails }: ContractDetailsActions.GetContractDetailsSuccess
   ) {
     const normalizedData = normalize(contractDetails, contractDetailsSchema);
-    patchState({
-      contractDetails: normalizedData,
+    setState({
+      contractDetails: normalizedData.entities.contractDetails,
       loading: false,
       loaded: true
     });
@@ -52,4 +82,5 @@ export class ContractDetailsState {
       loading: false
     });
   }
+  //#endregion Reducer
 }
