@@ -1,12 +1,10 @@
-<!-- <div *ngIf="questionFlow" class="row">
+<div *ngIf="questionFlow$ | async; let questionFlow;" class="row">
   <p>{{questionFlow.question}}</p>
-  <form *ngIf="questionFlow.type === 'Boolean'" #f="ngForm">
-    <input type="radio" id="true" name="choice" value="true" [(ngModel)]="questionFlow.answer">
+  <form *ngIf="questionFlow.type === 'Boolean'" #form="ngForm" (ngSubmit)="setAnswer(form)">
+    <input type="radio" id="true" name="choice" value="true" [ngModel]="questionFlow.answer">
     <label for="true">Yes</label>
-    <input type="radio" id="false" name="choice" value="false" [(ngModel)]="questionFlow.answer">
+    <input type="radio" id="false" name="choice" value="false" [ngModel]="questionFlow.answer">
     <label for="false">No</label>
-    <button type="button" (click)="setAnswer(f.value)">Submit</button>
+    <button>Submit</button>
   </form>
 </div>
- -->
-<p>QuestionForm</p>

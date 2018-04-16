@@ -3,7 +3,7 @@
     <app-sections></app-sections>
   </div>
   <div class="col border" style="overflow:auto">
-    <app-question-flows></app-question-flows>
+    <app-question-flows [parentFlows]="parentFlows$ | async"></app-question-flows>
   </div>
   <div class="col border" style="overflow:auto">
     <app-question-form></app-question-form>

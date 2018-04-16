@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { Store, Select } from '@ngxs/store';
-import { SectionsState } from '../store/states';
+import { SectionsState, QuestionFlowsState } from '../store/states';
 import * as SectionActions from '../store/actions/sections.actions';
 import * as QuestionFlowActions from '../store/actions/question-flows.actions';
 
@@ -16,6 +16,8 @@ import { Section } from '../contract-details.model';
 })
 export class SectionsComponent implements OnInit {
   @Select(SectionsState.getSectionsArray) sections$: Observable<Section[]>;
+  @Select(QuestionFlowsState.getCurrentSection)
+  currentSection$: Observable<Section>;
 
   constructor(private store: Store) {}
 
