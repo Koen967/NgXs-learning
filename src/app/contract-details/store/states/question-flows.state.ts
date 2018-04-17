@@ -40,7 +40,7 @@ export class QuestionFlowsState {
     return Object.keys(state.questionFlows).map(id => state.questionFlows[id]);
   }
 
-  @Selector()
+  /*   @Selector()
   static getParentFlowsArrayFromCurrentSection(
     state: QuestionFlowsStateModel,
     sectionState: SectionsStateModel
@@ -72,7 +72,7 @@ export class QuestionFlowsState {
     });
 
     return questionFlowsFromCurrentSection;
-  }
+  } */
 
   @Selector()
   static getCurrentQuestionFlow(state: QuestionFlowsStateModel) {

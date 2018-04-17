@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
-import { QuestionFlowsState, SectionsState } from './store/states';
+import { QuestionFlowsState, SectionsState, ParentState } from './store/states';
 import { Observable } from 'rxjs/Observable';
 import { QuestionFlow, Section } from './contract-details.model';
 
@@ -12,10 +12,10 @@ import * as QuestionFlowActions from '../contract-details/store/actions/question
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContractDetailsComponent implements OnInit {
-  @Select(QuestionFlowsState.getParentFlowsArrayFromCurrentSection)
+  @Select(ParentState.getParentFlowsArrayFromCurrentSection)
   parentFlows$: Observable<QuestionFlow[]>;
   @Select(SectionsState.getSectionsArray) sections$: Observable<Section[]>;
-  @Select(QuestionFlowsState.getQuestionFlowsArrayFromCurrentSection)
+  @Select(ParentState.getQuestionFlowsArrayFromCurrentSection)
   questionFlows$: Observable<QuestionFlow[]>;
   @Select(SectionsState.getCurrentSection) currSection$: Observable<Section>;
   @Select(QuestionFlowsState.getCurrentQuestionFlow)
