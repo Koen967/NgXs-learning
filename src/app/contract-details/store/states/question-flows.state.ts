@@ -97,12 +97,20 @@ export class QuestionFlowsState {
 
   @Action(QuestionFlowsActions.SetCurrentSection)
   SetCurrentSection(
-    { patchState }: StateContext<QuestionFlowsStateModel>,
+    { patchState, getState, dispatch }: StateContext<QuestionFlowsStateModel>,
     { section }: QuestionFlowsActions.SetCurrentSection
   ) {
+    const state = getState();
+
     patchState({
       currentSection: section
     });
+
+    dispatch(
+      new QuestionFlowsActions.SetCurrentQuestionFlow(
+        state.questionFlows[+section.questionFlows[0]]
+      )
+    );
   }
 
   @Action(QuestionFlowsActions.SetCurrentQuestionFlow)
