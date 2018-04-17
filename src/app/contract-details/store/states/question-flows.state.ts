@@ -23,7 +23,6 @@ import { SectionsStateModel } from './sections.state';
 
 export class QuestionFlowsStateModel {
   questionFlows: { [id: number]: QuestionFlow };
-  currentSection: Section;
   currentQuestionFlow: QuestionFlow;
 }
 
@@ -31,7 +30,6 @@ export class QuestionFlowsStateModel {
   name: 'questionFlows',
   defaults: {
     questionFlows: {},
-    currentSection: null,
     currentQuestionFlow: null
   }
 })
@@ -43,10 +41,13 @@ export class QuestionFlowsState {
   }
 
   @Selector()
-  static getParentFlowsArrayFromCurrentSection(state: QuestionFlowsStateModel) {
+  static getParentFlowsArrayFromCurrentSection(
+    state: QuestionFlowsStateModel,
+    sectionState: SectionsStateModel
+  ) {
     const questionFlowsFromCurrentSection: QuestionFlow[] = [];
 
-    state.currentSection.questionFlows.forEach(questionFlow => {
+    sectionState.currentSection.questionFlows.forEach(questionFlow => {
       questionFlowsFromCurrentSection.push(state.questionFlows[+questionFlow]);
     });
 
@@ -55,11 +56,12 @@ export class QuestionFlowsState {
 
   @Selector()
   static getQuestionFlowsArrayFromCurrentSection(
-    state: QuestionFlowsStateModel
+    state: QuestionFlowsStateModel,
+    sectionState: SectionsStateModel
   ) {
     const questionFlowsFromCurrentSection: QuestionFlow[] = [];
 
-    state.currentSection.questionFlows.forEach(questionFlow => {
+    sectionState.currentSection.questionFlows.forEach(questionFlow => {
       questionFlowsFromCurrentSection.push(state.questionFlows[+questionFlow]);
     });
 
@@ -70,11 +72,6 @@ export class QuestionFlowsState {
     });
 
     return questionFlowsFromCurrentSection;
-  }
-
-  @Selector()
-  static getCurrentSection(state: QuestionFlowsStateModel) {
-    return state.currentSection;
   }
 
   @Selector()
@@ -93,24 +90,6 @@ export class QuestionFlowsState {
     patchState({
       questionFlows: normalizedData.entities.questionFlows
     });
-  }
-
-  @Action(QuestionFlowsActions.SetCurrentSection)
-  SetCurrentSection(
-    { patchState, getState, dispatch }: StateContext<QuestionFlowsStateModel>,
-    { section }: QuestionFlowsActions.SetCurrentSection
-  ) {
-    const state = getState();
-
-    patchState({
-      currentSection: section
-    });
-
-    dispatch(
-      new QuestionFlowsActions.SetCurrentQuestionFlow(
-        state.questionFlows[+section.questionFlows[0]]
-      )
-    );
   }
 
   @Action(QuestionFlowsActions.SetCurrentQuestionFlow)
@@ -142,7 +121,6 @@ export class QuestionFlowsState {
 
     dispatch([
       new SectionsActions.UpdateCompletedQuestions(
-        state.currentSection,
         flow,
         answer,
         state.questionFlows

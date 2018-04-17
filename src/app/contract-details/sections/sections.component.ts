@@ -16,8 +16,7 @@ import { Section } from '../contract-details.model';
 })
 export class SectionsComponent implements OnInit {
   @Select(SectionsState.getSectionsArray) sections$: Observable<Section[]>;
-  @Select(QuestionFlowsState.getCurrentSection)
-  currentSection$: Observable<Section>;
+  @Select(SectionsState.getCurrentSection) currentSection$: Observable<Section>;
 
   constructor(private store: Store) {}
 

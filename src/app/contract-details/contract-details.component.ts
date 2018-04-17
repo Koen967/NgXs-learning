@@ -17,8 +17,7 @@ export class ContractDetailsComponent implements OnInit {
   @Select(SectionsState.getSectionsArray) sections$: Observable<Section[]>;
   @Select(QuestionFlowsState.getQuestionFlowsArrayFromCurrentSection)
   questionFlows$: Observable<QuestionFlow[]>;
-  @Select(QuestionFlowsState.getCurrentSection)
-  currSection$: Observable<Section>;
+  @Select(SectionsState.getCurrentSection) currSection$: Observable<Section>;
   @Select(QuestionFlowsState.getCurrentQuestionFlow)
   currQuestionFlow$: Observable<QuestionFlow>;
 

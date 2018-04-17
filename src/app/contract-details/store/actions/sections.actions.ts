@@ -4,17 +4,16 @@ import {
   QuestionFlow
 } from '../../contract-details.model';
 
-export class SetCurrentContractDetails {
-  static readonly type = '[SECTION] Set current contract details';
+export class SetCurrentSection {
+  static readonly type = '[SECTION] Set current section';
 
-  constructor(public contractDetails: ContractDetail) {}
+  constructor(public section: Section) {}
 }
 
 export class UpdateCompletedQuestions {
   static readonly type = '[SECTION] Update completed questions';
 
   constructor(
-    public section: Section,
     public questionFlow: QuestionFlow,
     public answer: any,
     public questionFlows: any

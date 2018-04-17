@@ -14,14 +14,14 @@ import { ContractDetailsService } from '../../contract-details.service';
 
 export class SectionsStateModel {
   sections: { [id: number]: Section };
-  currentContractDetails: ContractDetail;
+  currentSection: Section;
 }
 
 @State<SectionsStateModel>({
   name: 'sections',
   defaults: {
     sections: {},
-    currentContractDetails: null
+    currentSection: null
   }
 })
 export class SectionsState {
@@ -32,8 +32,8 @@ export class SectionsState {
   }
 
   @Selector()
-  static getCurrentContractDetails(state: SectionsStateModel) {
-    return state.currentContractDetails;
+  static getCurrentSection(state: SectionsStateModel) {
+    return state.currentSection;
   }
   //#endregion Selectors
 
@@ -49,13 +49,13 @@ export class SectionsState {
     });
   }
 
-  @Action(SectionsActions.SetCurrentContractDetails)
-  setCurrentContractDetails(
+  @Action(SectionsActions.SetCurrentSection)
+  setCurrentSection(
     { patchState }: StateContext<SectionsStateModel>,
-    { contractDetails }: SectionsActions.SetCurrentContractDetails
+    { section }: SectionsActions.SetCurrentSection
   ) {
     patchState({
-      currentContractDetails: contractDetails
+      currentSection: section
     });
   }
 
@@ -63,7 +63,6 @@ export class SectionsState {
   updateCompletedQuestions(
     { patchState, getState, dispatch }: StateContext<SectionsStateModel>,
     {
-      section,
       questionFlow,
       answer,
       questionFlows
@@ -84,10 +83,12 @@ export class SectionsState {
             patchState({
               sections: {
                 ...state.sections,
-                [section.id]: {
-                  ...state.sections[section.id],
+                [state.currentSection.id]: {
+                  ...state.sections[state.currentSection.id],
                   completedQuestions:
-                    section.completedQuestions - nChildQuestionFlows + 1
+                    state.currentSection.completedQuestions -
+                    nChildQuestionFlows +
+                    1
                 }
               }
             });
@@ -96,10 +97,11 @@ export class SectionsState {
             patchState({
               sections: {
                 ...state.sections,
-                [section.id]: {
-                  ...state.sections[section.id],
+                [state.currentSection.id]: {
+                  ...state.sections[state.currentSection.id],
                   completedQuestions:
-                    section.completedQuestions - nChildQuestionFlows
+                    state.currentSection.completedQuestions -
+                    nChildQuestionFlows
                 }
               }
             });
@@ -110,10 +112,12 @@ export class SectionsState {
             patchState({
               sections: {
                 ...state.sections,
-                [section.id]: {
-                  ...state.sections[section.id],
+                [state.currentSection.id]: {
+                  ...state.sections[state.currentSection.id],
                   completedQuestions:
-                    section.completedQuestions + nChildQuestionFlows + 1
+                    state.currentSection.completedQuestions +
+                    nChildQuestionFlows +
+                    1
                 }
               }
             });
@@ -122,10 +126,11 @@ export class SectionsState {
             patchState({
               sections: {
                 ...state.sections,
-                [section.id]: {
-                  ...state.sections[section.id],
+                [state.currentSection.id]: {
+                  ...state.sections[state.currentSection.id],
                   completedQuestions:
-                    section.completedQuestions + nChildQuestionFlows
+                    state.currentSection.completedQuestions +
+                    nChildQuestionFlows
                 }
               }
             });
@@ -137,16 +142,18 @@ export class SectionsState {
       patchState({
         sections: {
           ...state.sections,
-          [section.id]: {
-            ...state.sections[section.id],
-            completedQuestions: section.completedQuestions + 1
+          [state.currentSection.id]: {
+            ...state.sections[state.currentSection.id],
+            completedQuestions: state.currentSection.completedQuestions + 1
           }
         }
       });
     }
 
     dispatch(
-      new QuestionFlowActions.SetCurrentSection(state.sections[section.id])
+      new QuestionFlowActions.SetCurrentSection(
+        state.sections[state.currentSection.id]
+      )
     );
   }
   //#endregion Reducer
