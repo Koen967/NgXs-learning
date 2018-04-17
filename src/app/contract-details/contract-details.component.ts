@@ -154,5 +154,93 @@ export class ContractDetailsComponent implements OnInit {
     }
   }
 
-  previousQuestion() {}
+  previousQuestion(event) {
+    if (this.currentQuestionFlow.parentId === 0) {
+      if (
+        this.questionFlows.find(
+          flow => +flow.path === +this.currentQuestionFlow.path - 1
+        )
+      ) {
+        if (
+          this.questionFlows.find(
+            flow => +flow.path === +this.currentQuestionFlow.path - 1
+          ).questionFlows.length > 0 &&
+          this.questionFlows.find(
+            flow => +flow.path === +this.currentQuestionFlow.path - 1
+          ).showSubQuestionOn ===
+            this.questionFlows.find(
+              flow => +flow.path === +this.currentQuestionFlow.path - 1
+            ).answer
+        ) {
+          let highestPath = 0;
+          this.questionFlows
+            .find(flow => +flow.path === +this.currentQuestionFlow.path - 1)
+            .questionFlows.forEach(questionFlow => {
+              if (
+                +this.questionFlows.find(flow => flow.id === +questionFlow)
+                  .path > highestPath
+              ) {
+                highestPath = +this.questionFlows.find(
+                  flow => flow.id === +questionFlow
+                ).path;
+              }
+            });
+          const nextQuestionFlow = this.questionFlows.find(
+            flow => +flow.path === highestPath
+          );
+          this.store.dispatch(
+            new QuestionFlowActions.SetCurrentQuestionFlow(nextQuestionFlow)
+          );
+        } else {
+          const nextQuestionFlow = this.questionFlows.find(
+            flow => +flow.path === +this.currentQuestionFlow.path - 1
+          );
+          this.store.dispatch(
+            new QuestionFlowActions.SetCurrentQuestionFlow(nextQuestionFlow)
+          );
+        }
+      } else if (
+        this.sections.find(
+          section => section.sequence === this.currentSection.sequence - 1
+        )
+      ) {
+        const nextSection = this.sections.find(
+          section => section.sequence === this.currentSection.sequence - 1
+        );
+        this.store.dispatch(
+          new QuestionFlowActions.SetCurrentSection(nextSection)
+        );
+
+        let nextQuestionFlow = this.questionFlows[
+          this.questionFlows.length - 1
+        ];
+        if (nextQuestionFlow.parentId !== 0) {
+          const parentFlow = this.questionFlows.find(
+            flow => flow.id === nextQuestionFlow.parentId
+          );
+          if (parentFlow.showSubQuestionOn === parentFlow.answer) {
+            this.questionFlows.forEach(questionFlow => {
+              if (+questionFlow.path > +nextQuestionFlow.path) {
+                nextQuestionFlow = questionFlow;
+              }
+            });
+          } else {
+            nextQuestionFlow = parentFlow;
+          }
+        }
+        this.store.dispatch(
+          new QuestionFlowActions.SetCurrentQuestionFlow(nextQuestionFlow)
+        );
+      }
+    } else {
+      const nextQuestionFlow = this.questionFlows.find(
+        flow =>
+          (+flow.path).toFixed(2) ===
+          (+this.currentQuestionFlow.path - 0.1).toFixed(2)
+      );
+      this.store.dispatch(
+        new QuestionFlowActions.SetCurrentQuestionFlow(nextQuestionFlow)
+      );
+    }
+  }
 }
