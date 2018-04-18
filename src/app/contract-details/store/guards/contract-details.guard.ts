@@ -12,7 +12,7 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/catch';
 
 import * as ContractDetailsActions from '../actions/contract-details.actions';
-import { ContractDetailsState } from '../states';
+import { ContractDetailsState } from '../states/contract-details.state';
 
 @Injectable()
 export class ContractDetailsGuard implements CanActivate {

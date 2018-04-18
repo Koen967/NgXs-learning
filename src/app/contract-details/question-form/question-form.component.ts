@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store, Select } from '@ngxs/store';
 
-import { QuestionFlowsState } from '../store/states';
+import { ContractDetailsState } from '../store/states/contract-details.state';
 import { QuestionFlow } from '../contract-details.model';
 
 import * as QuestionFlowActions from '../store/actions/question-flows.actions';
@@ -14,7 +14,7 @@ import * as QuestionFlowActions from '../store/actions/question-flows.actions';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QuestionFormComponent implements OnInit {
-  @Select(QuestionFlowsState.getCurrentQuestionFlow)
+  @Select(ContractDetailsState.getCurrentQuestionFlow)
   questionFlow$: Observable<QuestionFlow>;
 
   questionFlow: QuestionFlow;
