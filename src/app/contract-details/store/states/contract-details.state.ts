@@ -140,8 +140,18 @@ export class ContractDetailsState {
       contractDetails: normalizedData.entities.contractDetails,
       sections: normalizedData.entities.sections,
       questionFlows: normalizedData.entities.questionFlows,
-      currentSection: null,
-      currentQuestionFlow: null,
+      // CurrentSection = { [id: number]: Section } waar id de eerste key is uit { [id: number]: Section }
+      currentSection:
+        normalizedData.entities.sections[
+          Object.keys(normalizedData.entities.sections).shift()
+        ],
+      // CurrentQuestionFlow = { [id: number]: QuestionFlow } waar id de eerste questionFlow is van de currentSection
+      currentQuestionFlow:
+        normalizedData.entities.questionFlows[
+          normalizedData.entities.sections[
+            Object.keys(normalizedData.entities.sections).shift()
+          ].questionFlows[0]
+        ],
       loading: false,
       loaded: true
     });

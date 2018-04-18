@@ -47,24 +47,6 @@ export class ContractDetailsComponent implements OnInit {
     this.sections$.subscribe(sections => {
       this.sections = sections;
     });
-
-    this.setInitialSelection();
-  }
-
-  setInitialSelection() {
-    let section: Section;
-    this.sections$.subscribe(sections => {
-      section = sections[0];
-    });
-    this.store.dispatch(new SectionActions.SetCurrentSection(section));
-
-    /* let questionFlow: QuestionFlow;
-    this.questionFlows$.subscribe(flow => {
-      questionFlow = flow[0];
-    });
-    this.store.dispatch(
-      new QuestionFlowActions.SetCurrentQuestionFlow(questionFlow)
-    ); */
   }
 
   nextQuestion() {
