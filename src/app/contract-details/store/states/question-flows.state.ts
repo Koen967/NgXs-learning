@@ -19,9 +19,9 @@ import {
 import { normalize } from 'normalizr';
 
 import { ContractDetailsService } from '../../contract-details.service';
-import { SectionsStateModel } from './sections.state';
+import { SectionsStateModel, SectionsState } from './sections.state';
 
-export class QuestionFlowsStateModel {
+export class QuestionFlowsStateModel extends SectionsStateModel {
   questionFlows: { [id: number]: QuestionFlow };
   currentQuestionFlow: QuestionFlow;
 }
@@ -30,10 +30,12 @@ export class QuestionFlowsStateModel {
   name: 'questionFlows',
   defaults: {
     questionFlows: {},
-    currentQuestionFlow: null
+    currentQuestionFlow: null,
+    sections: {},
+    currentSection: null
   }
 })
-export class QuestionFlowsState {
+export class QuestionFlowsState extends SectionsState {
   //#region Selectors
   @Selector()
   static getQuestionFlowsArray(state: QuestionFlowsStateModel) {
@@ -41,13 +43,10 @@ export class QuestionFlowsState {
   }
 
   @Selector()
-  static getParentFlowsArrayFromCurrentSection(
-    state: QuestionFlowsStateModel,
-    sectionState: SectionsStateModel
-  ) {
+  static getParentFlowsArrayFromCurrentSection(state: QuestionFlowsStateModel) {
     const questionFlowsFromCurrentSection: QuestionFlow[] = [];
 
-    sectionState.currentSection.questionFlows.forEach(questionFlow => {
+    state.currentSection.questionFlows.forEach(questionFlow => {
       questionFlowsFromCurrentSection.push(state.questionFlows[+questionFlow]);
     });
 
@@ -56,12 +55,11 @@ export class QuestionFlowsState {
 
   @Selector()
   static getQuestionFlowsArrayFromCurrentSection(
-    state: QuestionFlowsStateModel,
-    sectionState: SectionsStateModel
+    state: QuestionFlowsStateModel
   ) {
     const questionFlowsFromCurrentSection: QuestionFlow[] = [];
 
-    sectionState.currentSection.questionFlows.forEach(questionFlow => {
+    state.currentSection.questionFlows.forEach(questionFlow => {
       questionFlowsFromCurrentSection.push(state.questionFlows[+questionFlow]);
     });
 

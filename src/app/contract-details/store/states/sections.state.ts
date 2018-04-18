@@ -11,6 +11,10 @@ import {
 import { normalize } from 'normalizr';
 
 import { ContractDetailsService } from '../../contract-details.service';
+import {
+  ContractDetailsStateModel,
+  ContractDetailsState
+} from './contract-details.state';
 
 export class SectionsStateModel {
   sections: { [id: number]: Section };
@@ -151,7 +155,7 @@ export class SectionsState {
     }
 
     dispatch(
-      new QuestionFlowActions.SetCurrentSection(
+      new SectionsActions.SetCurrentSection(
         state.sections[state.currentSection.id]
       )
     );
