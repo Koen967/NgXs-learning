@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { QuestionFlow, Section } from './contract-details.model';
 
 import * as QuestionFlowActions from '../contract-details/store/actions/question-flows.actions';
+import * as SectionActions from '../contract-details/store/actions/sections.actions';
 @Component({
   selector: 'app-contract-details',
   templateUrl: './contract-details.component.html',
@@ -53,7 +54,7 @@ export class ContractDetailsComponent implements OnInit {
     this.sections$.subscribe(sections => {
       section = sections[0];
     });
-    this.store.dispatch(new QuestionFlowActions.SetCurrentSection(section));
+    this.store.dispatch(new SectionActions.SetCurrentSection(section));
   }
 
   nextQuestion() {
@@ -85,7 +86,7 @@ export class ContractDetailsComponent implements OnInit {
             section => section.sequence === this.currentSection.sequence + 1
           );
           this.store.dispatch(
-            new QuestionFlowActions.SetCurrentSection(nextSection)
+            new SectionActions.SetCurrentSection(nextSection)
           );
         }
       }
@@ -109,7 +110,7 @@ export class ContractDetailsComponent implements OnInit {
             section => section.sequence === this.currentSection.sequence + 1
           );
           this.store.dispatch(
-            new QuestionFlowActions.SetCurrentSection(nextSection)
+            new SectionActions.SetCurrentSection(nextSection)
           );
         }
       } else if (
@@ -146,9 +147,7 @@ export class ContractDetailsComponent implements OnInit {
         const nextSection = this.sections.find(
           section => section.sequence === this.currentSection.sequence + 1
         );
-        this.store.dispatch(
-          new QuestionFlowActions.SetCurrentSection(nextSection)
-        );
+        this.store.dispatch(new SectionActions.SetCurrentSection(nextSection));
       }
     }
   }
@@ -206,9 +205,7 @@ export class ContractDetailsComponent implements OnInit {
         const nextSection = this.sections.find(
           section => section.sequence === this.currentSection.sequence - 1
         );
-        this.store.dispatch(
-          new QuestionFlowActions.SetCurrentSection(nextSection)
-        );
+        this.store.dispatch(new SectionActions.SetCurrentSection(nextSection));
 
         let nextQuestionFlow = this.questionFlows[
           this.questionFlows.length - 1

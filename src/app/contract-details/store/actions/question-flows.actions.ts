@@ -1,11 +1,5 @@
 import { Section, QuestionFlow } from '../../contract-details.model';
 
-export class SetCurrentSection {
-  static readonly type = '[SECTION] Set current section';
-
-  constructor(public section: Section) {}
-}
-
 export class SetCurrentQuestionFlow {
   static readonly type = '[QUESTION FLOW] Set current question flow';
 
