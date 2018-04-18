@@ -178,7 +178,7 @@ export class ContractDetailsState {
 
   @Action(SectionsActions.UpdateCompletedQuestions)
   updateCompletedQuestions(
-    { patchState, getState, dispatch }: StateContext<ContractDetailsStateModel>,
+    { patchState, getState }: StateContext<ContractDetailsStateModel>,
     {
       questionFlow,
       answer,
@@ -207,6 +207,13 @@ export class ContractDetailsState {
                     nChildQuestionFlows +
                     1
                 }
+              },
+              currentSection: {
+                ...state.sections[state.currentSection.id],
+                completedQuestions:
+                  state.currentSection.completedQuestions -
+                  nChildQuestionFlows +
+                  1
               }
             });
           } else {
@@ -220,6 +227,11 @@ export class ContractDetailsState {
                     state.currentSection.completedQuestions -
                     nChildQuestionFlows
                 }
+              },
+              currentSection: {
+                ...state.sections[state.currentSection.id],
+                completedQuestions:
+                  state.currentSection.completedQuestions - nChildQuestionFlows
               }
             });
           }
@@ -236,6 +248,13 @@ export class ContractDetailsState {
                     nChildQuestionFlows +
                     1
                 }
+              },
+              currentSection: {
+                ...state.sections[state.currentSection.id],
+                completedQuestions:
+                  state.currentSection.completedQuestions +
+                  nChildQuestionFlows +
+                  1
               }
             });
           } else {
@@ -249,6 +268,11 @@ export class ContractDetailsState {
                     state.currentSection.completedQuestions +
                     nChildQuestionFlows
                 }
+              },
+              currentSection: {
+                ...state.sections[state.currentSection.id],
+                completedQuestions:
+                  state.currentSection.completedQuestions - nChildQuestionFlows
               }
             });
           }
@@ -263,15 +287,13 @@ export class ContractDetailsState {
             ...state.sections[state.currentSection.id],
             completedQuestions: state.currentSection.completedQuestions + 1
           }
+        },
+        currentSection: {
+          ...state.sections[state.currentSection.id],
+          completedQuestions: state.currentSection.completedQuestions + 1
         }
       });
     }
-
-    dispatch(
-      new SectionsActions.SetCurrentSection(
-        state.sections[state.currentSection.id]
-      )
-    );
   }
   //#endregion Reducer Sections
 
@@ -300,6 +322,11 @@ export class ContractDetailsState {
           answer: answer,
           completed: true
         }
+      },
+      currentQuestionFlow: {
+        ...state.questionFlows[flow.id],
+        answer: answer,
+        completed: true
       }
     });
 
@@ -308,9 +335,6 @@ export class ContractDetailsState {
         flow,
         answer,
         state.questionFlows
-      ),
-      new QuestionFlowsActions.SetCurrentQuestionFlow(
-        state.questionFlows[flow.id]
       )
     ]);
   }
