@@ -20,17 +20,20 @@ import { normalize } from 'normalizr';
 
 import { ContractDetailsService } from '../../contract-details.service';
 import { SectionsStateModel } from './sections.state';
+import { patch } from 'webdriver-js-extender';
 
 export class QuestionFlowsStateModel {
   questionFlows: { [id: number]: QuestionFlow };
   currentQuestionFlow: QuestionFlow;
+  currentSectionQuestionFlows: number[];
 }
 
 @State<QuestionFlowsStateModel>({
   name: 'questionFlows',
   defaults: {
     questionFlows: {},
-    currentQuestionFlow: null
+    currentQuestionFlow: null,
+    currentSectionQuestionFlows: []
   }
 })
 export class QuestionFlowsState {
@@ -41,14 +44,13 @@ export class QuestionFlowsState {
   }
 
   @Selector()
-  static getParentFlowsArrayFromCurrentSection(
-    state: QuestionFlowsStateModel,
-    sectionState: SectionsStateModel
-  ) {
+  static getParentFlowsArrayFromCurrentSection(state: QuestionFlowsStateModel) {
     const questionFlowsFromCurrentSection: QuestionFlow[] = [];
 
-    sectionState.currentSection.questionFlows.forEach(questionFlow => {
-      questionFlowsFromCurrentSection.push(state.questionFlows[+questionFlow]);
+    state.currentSectionQuestionFlows.forEach(id => {
+      if (state.questionFlows[id].parentId === 0) {
+        questionFlowsFromCurrentSection.push(state.questionFlows[id]);
+      }
     });
 
     return questionFlowsFromCurrentSection;
@@ -56,19 +58,12 @@ export class QuestionFlowsState {
 
   @Selector()
   static getQuestionFlowsArrayFromCurrentSection(
-    state: QuestionFlowsStateModel,
-    sectionState: SectionsStateModel
+    state: QuestionFlowsStateModel
   ) {
     const questionFlowsFromCurrentSection: QuestionFlow[] = [];
 
-    sectionState.currentSection.questionFlows.forEach(questionFlow => {
-      questionFlowsFromCurrentSection.push(state.questionFlows[+questionFlow]);
-    });
-
-    questionFlowsFromCurrentSection.forEach(questionFlow => {
-      questionFlow.questionFlows.forEach(childFlow => {
-        questionFlowsFromCurrentSection.push(state.questionFlows[+childFlow]);
-      });
+    state.currentSectionQuestionFlows.forEach(id => {
+      questionFlowsFromCurrentSection.push(state.questionFlows[id]);
     });
 
     return questionFlowsFromCurrentSection;
@@ -129,6 +124,35 @@ export class QuestionFlowsState {
         state.questionFlows[flow.id]
       )
     ]);
+  }
+
+  @Action(QuestionFlowsActions.SetCurrentSectionQuestionFlows)
+  CurrSectionQuestionFlows(
+    { patchState, getState, dispatch }: StateContext<QuestionFlowsStateModel>,
+    { section }: QuestionFlowsActions.SetCurrentSectionQuestionFlows
+  ) {
+    const state = getState();
+    const flowIds: number[] = [];
+
+    section.questionFlows.forEach(flow => {
+      flowIds.push(state.questionFlows[+flow].id);
+    });
+
+    flowIds.forEach(id => {
+      state.questionFlows[id].questionFlows.forEach(flow => {
+        flowIds.push(state.questionFlows[+flow].id);
+      });
+    });
+
+    patchState({
+      currentSectionQuestionFlows: flowIds
+    });
+
+    dispatch(
+      new QuestionFlowsActions.SetCurrentQuestionFlow(
+        state.questionFlows[+section.questionFlows[0]]
+      )
+    );
   }
   //#endregion Reducer
 }

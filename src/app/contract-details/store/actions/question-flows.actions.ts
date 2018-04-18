@@ -17,3 +17,9 @@ export class UpdateCurrentSection {
 
   constructor(public questionFlow: QuestionFlow, public answer: any) {}
 }
+
+export class SetCurrentSectionQuestionFlows {
+  static readonly type = '[QUESTION FLOW] Set questionFlow ids from section';
+
+  constructor(public section: Section) {}
+}

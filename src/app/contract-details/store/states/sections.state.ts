@@ -51,12 +51,14 @@ export class SectionsState {
 
   @Action(SectionsActions.SetCurrentSection)
   setCurrentSection(
-    { patchState }: StateContext<SectionsStateModel>,
+    { patchState, dispatch }: StateContext<SectionsStateModel>,
     { section }: SectionsActions.SetCurrentSection
   ) {
     patchState({
       currentSection: section
     });
+
+    dispatch(new QuestionFlowActions.SetCurrentSectionQuestionFlows(section));
   }
 
   @Action(SectionsActions.UpdateCompletedQuestions)
