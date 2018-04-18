@@ -23,6 +23,6 @@ export class SectionsComponent implements OnInit {
   ngOnInit() {}
 
   openQuestionFlows(section: Section) {
-    this.store.dispatch(new QuestionFlowActions.SetCurrentSection(section));
+    this.store.dispatch(new SectionActions.SetCurrentSection(section));
   }
 }

@@ -151,7 +151,7 @@ export class SectionsState {
     }
 
     dispatch(
-      new QuestionFlowActions.SetCurrentSection(
+      new SectionsActions.SetCurrentSection(
         state.sections[state.currentSection.id]
       )
     );
