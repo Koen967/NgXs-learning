@@ -15,8 +15,8 @@ export class ParentState {
   static getParentFlowsArrayFromCurrentSection(state) {
     const questionFlowsFromCurrentSection: QuestionFlow[] = [];
 
-    state.currentSection.questionFlows.forEach(questionFlow => {
-      questionFlowsFromCurrentSection.push(state.questionFlows[+questionFlow]);
+    state.sections.currentSection.questionFlows.forEach(questionFlow => {
+      questionFlowsFromCurrentSection.push(state.questionFlows.questionFlows[+questionFlow]);
     });
 
     return questionFlowsFromCurrentSection;
@@ -26,13 +26,13 @@ export class ParentState {
   static getQuestionFlowsArrayFromCurrentSection(state) {
     const questionFlowsFromCurrentSection: QuestionFlow[] = [];
 
-    state.currentSection.questionFlows.forEach(questionFlow => {
-      questionFlowsFromCurrentSection.push(state.questionFlows[+questionFlow]);
+    state.sections.currentSection.questionFlows.forEach(questionFlow => {
+      questionFlowsFromCurrentSection.push(state.questionFlows.questionFlows[+questionFlow]);
     });
 
     questionFlowsFromCurrentSection.forEach(questionFlow => {
       questionFlow.questionFlows.forEach(childFlow => {
-        questionFlowsFromCurrentSection.push(state.questionFlows[+childFlow]);
+        questionFlowsFromCurrentSection.push(state.questionFlows.questionFlows[+childFlow]);
       });
     });
 
