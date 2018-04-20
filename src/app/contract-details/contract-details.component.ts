@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
-import { QuestionFlowsState, SectionsState, ParentState } from './store/states';
+import { QuestionFlowsState, SectionsState } from './store/states';
 import { Observable } from 'rxjs/Observable';
 import { QuestionFlow, Section } from './contract-details.model';
 
@@ -13,10 +13,10 @@ import * as SectionActions from '../contract-details/store/actions/sections.acti
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContractDetailsComponent implements OnInit {
-  @Select(ParentState.getParentFlowsArrayFromCurrentSection)
+  @Select(SectionsState.getParentFlowsArrayFromCurrentSection)
   parentFlows$: Observable<QuestionFlow[]>;
   @Select(SectionsState.getSectionsArray) sections$: Observable<Section[]>;
-  @Select(ParentState.getQuestionFlowsArrayFromCurrentSection)
+  @Select(SectionsState.getQuestionFlowsArrayFromCurrentSection)
   questionFlows$: Observable<QuestionFlow[]>;
   @Select(SectionsState.getCurrentSection) currSection$: Observable<Section>;
   @Select(QuestionFlowsState.getCurrentQuestionFlow)
@@ -57,7 +57,6 @@ export class ContractDetailsComponent implements OnInit {
     this.store.dispatch(new SectionActions.SetCurrentSection(section));
     let questionFlow: QuestionFlow;
     this.questionFlows$.subscribe(flow => {
-      console.log(flow);
       questionFlow = flow[0];
     });
     this.store.dispatch(

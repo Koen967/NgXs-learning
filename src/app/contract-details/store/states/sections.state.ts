@@ -6,11 +6,13 @@ import * as QuestionFlowActions from '../actions/question-flows.actions';
 import {
   ContractDetail,
   contractDetailsSchema,
-  Section
+  Section,
+  QuestionFlow
 } from '../../contract-details.model';
 import { normalize } from 'normalizr';
 
 import { ContractDetailsService } from '../../contract-details.service';
+import { QuestionFlowsState } from './question-flows.state';
 
 export class SectionsStateModel {
   sections: { [id: number]: Section };
@@ -22,7 +24,8 @@ export class SectionsStateModel {
   defaults: {
     sections: {},
     currentSection: null
-  }
+  },
+  children: [QuestionFlowsState]
 })
 export class SectionsState {
   //#region Selectors
@@ -35,17 +38,52 @@ export class SectionsState {
   static getCurrentSection(state: SectionsStateModel) {
     return state.currentSection;
   }
+
+  @Selector()
+  static getParentFlowsArrayFromCurrentSection(state) {
+    const questionFlowsFromCurrentSection: QuestionFlow[] = [];
+
+    state.currentSection.questionFlows.forEach(questionFlow => {
+      questionFlowsFromCurrentSection.push(
+        state.questionFlows.questionFlows[+questionFlow]
+      );
+    });
+
+    return questionFlowsFromCurrentSection;
+  }
+
+  @Selector()
+  static getQuestionFlowsArrayFromCurrentSection(state) {
+    const questionFlowsFromCurrentSection: QuestionFlow[] = [];
+
+    state.currentSection.questionFlows.forEach(questionFlow => {
+      questionFlowsFromCurrentSection.push(
+        state.questionFlows.questionFlows[+questionFlow]
+      );
+    });
+
+    questionFlowsFromCurrentSection.forEach(questionFlow => {
+      questionFlow.questionFlows.forEach(childFlow => {
+        questionFlowsFromCurrentSection.push(
+          state.questionFlows.questionFlows[+childFlow]
+        );
+      });
+    });
+
+    return questionFlowsFromCurrentSection;
+  }
   //#endregion Selectors
 
   //#region Reducer
   @Action(ContractDetailsActions.GetContractDetailsSuccess)
   getContractDetailsSuccess(
-    { patchState }: StateContext<SectionsStateModel>,
+    { setState }: StateContext<SectionsStateModel>,
     { contractDetails }: ContractDetailsActions.GetContractDetailsSuccess
   ) {
     const normalizedData = normalize(contractDetails, contractDetailsSchema);
-    patchState({
-      sections: normalizedData.entities.sections
+    setState({
+      sections: normalizedData.entities.sections,
+      currentSection: null
     });
   }
 

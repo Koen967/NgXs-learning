@@ -83,12 +83,13 @@ export class QuestionFlowsState {
   //#region Reducer
   @Action(ContractDetailsActions.GetContractDetailsSuccess)
   getContractDetailsSuccess(
-    { patchState }: StateContext<QuestionFlowsStateModel>,
+    { setState }: StateContext<QuestionFlowsStateModel>,
     { contractDetails }: ContractDetailsActions.GetContractDetailsSuccess
   ) {
     const normalizedData = normalize(contractDetails, contractDetailsSchema);
-    patchState({
-      questionFlows: normalizedData.entities.questionFlows
+    setState({
+      questionFlows: normalizedData.entities.questionFlows,
+      currentQuestionFlow: null
     });
   }
 

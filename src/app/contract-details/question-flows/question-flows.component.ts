@@ -5,11 +5,7 @@ import {
   Input
 } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
-import {
-  QuestionFlowsState,
-  SectionsState,
-  ParentState
-} from '../store/states';
+import { QuestionFlowsState, SectionsState } from '../store/states';
 import { QuestionFlow, Section } from '../contract-details.model';
 import { Observable } from 'rxjs/Observable';
 
@@ -24,7 +20,7 @@ import * as QuestionFlowActions from '../store/actions/question-flows.actions';
 export class QuestionFlowsComponent implements OnInit {
   @Input() parentFlows: QuestionFlow[];
 
-  @Select(ParentState.getQuestionFlowsArrayFromCurrentSection)
+  @Select(SectionsState.getQuestionFlowsArrayFromCurrentSection)
   questionFlows$: Observable<QuestionFlow[]>;
   @Select(QuestionFlowsState.getCurrentQuestionFlow)
   currentQuestionFlow$: Observable<QuestionFlow>;

@@ -6,7 +6,6 @@ import { FormsModule } from '@angular/forms';
 import { NgxsModule } from '@ngxs/store';
 import {
   ContractDetailsState,
-  ParentState,
   SectionsState,
   QuestionFlowsState
 } from './store/states';
@@ -24,7 +23,6 @@ import { ContractDetailsService } from './contract-details.service';
     CommonModule,
     NgxsModule.forFeature([
       ContractDetailsState,
-      ParentState,
       SectionsState,
       QuestionFlowsState
     ]),

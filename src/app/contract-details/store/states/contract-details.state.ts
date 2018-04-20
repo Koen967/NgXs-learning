@@ -10,6 +10,7 @@ import { normalize } from 'normalizr';
 import { ContractDetailsService } from '../../contract-details.service';
 import { catchError, map } from 'rxjs/operators';
 import { of } from 'rxjs/observable/of';
+import { SectionsState } from './sections.state';
 
 export class ContractDetailsStateModel {
   contractDetails: { [id: number]: ContractDetail };
@@ -23,7 +24,8 @@ export class ContractDetailsStateModel {
     contractDetails: {},
     loading: false,
     loaded: false
-  }
+  },
+  children: [SectionsState]
 })
 export class ContractDetailsState {
   constructor(private contractDetailsService: ContractDetailsService) {}
