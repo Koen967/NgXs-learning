@@ -7,7 +7,7 @@ import {
 import { Store, Select } from '@ngxs/store';
 import { QuestionFlowsState, SectionsState } from '../store/states';
 import { QuestionFlow, Section } from '../contract-details.model';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import * as QuestionFlowActions from '../store/actions/question-flows.actions';
 

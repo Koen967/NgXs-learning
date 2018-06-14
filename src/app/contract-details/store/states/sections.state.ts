@@ -2,6 +2,7 @@ import { State, Action, StateContext, Selector } from '@ngxs/store';
 import * as ContractDetailsActions from '../actions/contract-details.actions';
 import * as SectionsActions from '../actions/sections.actions';
 import * as QuestionFlowActions from '../actions/question-flows.actions';
+import produce from 'immer';
 
 import {
   ContractDetail,
@@ -99,7 +100,12 @@ export class SectionsState {
 
   @Action(SectionsActions.UpdateCompletedQuestions)
   updateCompletedQuestions(
-    { patchState, getState, dispatch }: StateContext<SectionsStateModel>,
+    {
+      patchState,
+      getState,
+      setState,
+      dispatch
+    }: StateContext<SectionsStateModel>,
     {
       questionFlow,
       answer,
@@ -117,6 +123,12 @@ export class SectionsState {
       if (questionFlow.answer !== answer) {
         if (questionFlow.showSubQuestionOn === answer) {
           if (!questionFlow.completed) {
+            produce(state, draft => {
+              draft.sections[state.currentSection.id].completedQuestions =
+                draft.currentSection.completedQuestions -
+                nChildQuestionFlows +
+                1;
+            });
             // If questionFlow has children, committed answer is different from current, it opens the subs and parent wasn't answered yet.
             patchState({
               sections: {

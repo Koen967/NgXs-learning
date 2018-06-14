@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
 import { QuestionFlowsState, SectionsState } from './store/states';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { QuestionFlow, Section } from './contract-details.model';
 
 import * as QuestionFlowActions from '../contract-details/store/actions/question-flows.actions';
