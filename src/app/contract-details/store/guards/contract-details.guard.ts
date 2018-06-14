@@ -40,8 +40,9 @@ export class ContractDetailsGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> {
-    return this.getContractDetails()
-      .pipe(switchMap(() => of(true)),
-      catchError(() => of(false));
+    return this.getContractDetails().pipe(
+      switchMap(() => of(true)),
+      catchError(() => of(false))
+    );
   }
 }

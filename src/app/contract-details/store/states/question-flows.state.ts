@@ -17,6 +17,7 @@ import {
   Section
 } from '../../contract-details.model';
 import { normalize } from 'normalizr';
+import produce from 'immer';
 
 import { ContractDetailsService } from '../../contract-details.service';
 import { SectionsStateModel } from './sections.state';
@@ -83,11 +84,14 @@ export class QuestionFlowsState {
   //#region Reducer
   @Action(ContractDetailsActions.GetContractDetailsSuccess)
   getContractDetailsSuccess(
-    { setState }: StateContext<QuestionFlowsStateModel>,
-    { contractDetails }: ContractDetailsActions.GetContractDetailsSuccess
+    ctx: StateContext<QuestionFlowsStateModel>,
+    action: ContractDetailsActions.GetContractDetailsSuccess
   ) {
-    const normalizedData = normalize(contractDetails, contractDetailsSchema);
-    setState({
+    const normalizedData = normalize(
+      action.contractDetails,
+      contractDetailsSchema
+    );
+    ctx.setState({
       questionFlows: normalizedData.entities.questionFlows,
       currentQuestionFlow: null
     });
@@ -95,39 +99,35 @@ export class QuestionFlowsState {
 
   @Action(QuestionFlowsActions.SetCurrentQuestionFlow)
   SetCurrentQuestionFlow(
-    { patchState }: StateContext<QuestionFlowsStateModel>,
-    { questionFlow }: QuestionFlowsActions.SetCurrentQuestionFlow
+    ctx: StateContext<QuestionFlowsStateModel>,
+    action: QuestionFlowsActions.SetCurrentQuestionFlow
   ) {
-    patchState({
-      currentQuestionFlow: questionFlow
+    ctx.patchState({
+      currentQuestionFlow: action.questionFlow
     });
   }
 
   @Action(QuestionFlowsActions.SetAnswer)
   SetAnswer(
-    { patchState, getState, dispatch }: StateContext<QuestionFlowsStateModel>,
-    { answer, flow }: QuestionFlowsActions.SetAnswer
+    ctx: StateContext<QuestionFlowsStateModel>,
+    action: QuestionFlowsActions.SetAnswer
   ) {
-    const state = getState();
-    patchState({
-      questionFlows: {
-        ...state.questionFlows,
-        [flow.id]: {
-          ...state.questionFlows[flow.id],
-          answer: answer,
-          completed: true
-        }
-      }
-    });
+    const state = ctx.getState();
+    ctx.setState(
+      produce(ctx.getState(), draft => {
+        draft.questionFlows[action.flow.id].answer = action.answer;
+        draft.questionFlows[action.flow.id].completed = true;
+      })
+    );
 
-    dispatch([
+    ctx.dispatch([
       new SectionsActions.UpdateCompletedQuestions(
-        flow,
-        answer,
+        action.flow,
+        action.answer,
         state.questionFlows
       ),
       new QuestionFlowsActions.SetCurrentQuestionFlow(
-        state.questionFlows[flow.id]
+        state.questionFlows[action.flow.id]
       )
     ]);
   }

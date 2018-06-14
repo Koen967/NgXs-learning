@@ -40,36 +40,35 @@ export class ContractDetailsState {
   //#region Reducer
   @Action(ContractDetailsActions.GetContractDetails)
   getContractDetails(
-    { patchState, dispatch }: StateContext<ContractDetailsStateModel>,
-    { id }: ContractDetailsActions.GetContractDetails
+    ctx: StateContext<ContractDetailsStateModel>,
+    action: ContractDetailsActions.GetContractDetails
   ) {
-    patchState({
+    ctx.patchState({
       loading: true
     });
 
-    return this.contractDetailsService
-      .getContractDetailsFromId(id)
-      .pipe(
-        map(contractDetails =>
-          dispatch(
-            new ContractDetailsActions.GetContractDetailsSuccess(
-              contractDetails
-            )
-          )
-        ),
-        catchError(error =>
-          dispatch(new ContractDetailsActions.GetContractDetailsFailed(error))
+    return this.contractDetailsService.getContractDetailsFromId(action.id).pipe(
+      map(contractDetails =>
+        ctx.dispatch(
+          new ContractDetailsActions.GetContractDetailsSuccess(contractDetails)
         )
-      );
+      ),
+      catchError(error =>
+        ctx.dispatch(new ContractDetailsActions.GetContractDetailsFailed(error))
+      )
+    );
   }
 
   @Action(ContractDetailsActions.GetContractDetailsSuccess)
   getContractDetailsSuccess(
-    { setState }: StateContext<ContractDetailsStateModel>,
-    { contractDetails }: ContractDetailsActions.GetContractDetailsSuccess
+    ctx: StateContext<ContractDetailsStateModel>,
+    action: ContractDetailsActions.GetContractDetailsSuccess
   ) {
-    const normalizedData = normalize(contractDetails, contractDetailsSchema);
-    setState({
+    const normalizedData = normalize(
+      action.contractDetails,
+      contractDetailsSchema
+    );
+    ctx.setState({
       contractDetails: normalizedData.entities.contractDetails,
       loading: false,
       loaded: true
@@ -77,10 +76,8 @@ export class ContractDetailsState {
   }
 
   @Action(ContractDetailsActions.GetContractDetailsFailed)
-  getContractDetailsFailed({
-    patchState
-  }: StateContext<ContractDetailsStateModel>) {
-    patchState({
+  getContractDetailsFailed(ctx: StateContext<ContractDetailsStateModel>) {
+    ctx.patchState({
       loading: false
     });
   }
