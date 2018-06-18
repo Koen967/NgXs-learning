@@ -7,7 +7,7 @@ import {
 export class SetCurrentSection {
   static readonly type = '[SECTION] Set current section';
 
-  constructor(public section: Section) {}
+  constructor(public section: number) {}
 }
 
 export class UpdateCompletedQuestions {

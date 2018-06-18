@@ -23,7 +23,7 @@ export class QuestionFlowsComponent implements OnInit {
   @Select(SectionsState.getQuestionFlowsArrayFromCurrentSection)
   questionFlows$: Observable<QuestionFlow[]>;
   @Select(QuestionFlowsState.getCurrentQuestionFlow)
-  currentQuestionFlow$: Observable<QuestionFlow>;
+  currentQuestionFlow$: Observable<number>;
 
   questionFlows: QuestionFlow[];
 
@@ -37,7 +37,7 @@ export class QuestionFlowsComponent implements OnInit {
 
   openQuestionFlowForm(questionFlow) {
     this.store.dispatch(
-      new QuestionFlowActions.SetCurrentQuestionFlow(questionFlow)
+      new QuestionFlowActions.SetCurrentQuestionFlow(questionFlow.id)
     );
   }
 

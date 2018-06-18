@@ -24,7 +24,7 @@ import { SectionsStateModel } from './sections.state';
 
 export class QuestionFlowsStateModel {
   questionFlows: { [id: number]: QuestionFlow };
-  currentQuestionFlow: QuestionFlow;
+  currentQuestionFlow: number;
 }
 
 @State<QuestionFlowsStateModel>({
@@ -40,40 +40,6 @@ export class QuestionFlowsState {
   static getQuestionFlowsArray(state: QuestionFlowsStateModel) {
     return Object.keys(state.questionFlows).map(id => state.questionFlows[id]);
   }
-
-  /*   @Selector()
-  static getParentFlowsArrayFromCurrentSection(
-    state: QuestionFlowsStateModel,
-    sectionState: SectionsStateModel
-  ) {
-    const questionFlowsFromCurrentSection: QuestionFlow[] = [];
-
-    sectionState.currentSection.questionFlows.forEach(questionFlow => {
-      questionFlowsFromCurrentSection.push(state.questionFlows[+questionFlow]);
-    });
-
-    return questionFlowsFromCurrentSection;
-  }
-
-  @Selector()
-  static getQuestionFlowsArrayFromCurrentSection(
-    state: QuestionFlowsStateModel,
-    sectionState: SectionsStateModel
-  ) {
-    const questionFlowsFromCurrentSection: QuestionFlow[] = [];
-
-    sectionState.currentSection.questionFlows.forEach(questionFlow => {
-      questionFlowsFromCurrentSection.push(state.questionFlows[+questionFlow]);
-    });
-
-    questionFlowsFromCurrentSection.forEach(questionFlow => {
-      questionFlow.questionFlows.forEach(childFlow => {
-        questionFlowsFromCurrentSection.push(state.questionFlows[+childFlow]);
-      });
-    });
-
-    return questionFlowsFromCurrentSection;
-  } */
 
   @Selector()
   static getCurrentQuestionFlow(state: QuestionFlowsStateModel) {
@@ -91,6 +57,7 @@ export class QuestionFlowsState {
       action.contractDetails,
       contractDetailsSchema
     );
+    console.log('TEST', normalizedData);
     ctx.setState({
       questionFlows: normalizedData.entities.questionFlows,
       currentQuestionFlow: null
@@ -105,6 +72,7 @@ export class QuestionFlowsState {
     ctx.patchState({
       currentQuestionFlow: action.questionFlow
     });
+    console.log('Setting flow');
   }
 
   @Action(QuestionFlowsActions.SetAnswer)
@@ -120,16 +88,13 @@ export class QuestionFlowsState {
       })
     );
 
-    ctx.dispatch([
+    ctx.dispatch(
       new SectionsActions.UpdateCompletedQuestions(
         action.flow,
         action.answer,
         state.questionFlows
-      ),
-      new QuestionFlowsActions.SetCurrentQuestionFlow(
-        state.questionFlows[action.flow.id]
       )
-    ]);
+    );
   }
   //#endregion Reducer
 }

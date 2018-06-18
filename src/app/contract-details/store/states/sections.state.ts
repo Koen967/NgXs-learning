@@ -15,7 +15,7 @@ import { QuestionFlowsState } from './question-flows.state';
 
 export class SectionsStateModel {
   sections: { [id: number]: Section };
-  currentSection: Section;
+  currentSection: number;
 }
 
 @State<SectionsStateModel>({
@@ -42,7 +42,7 @@ export class SectionsState {
   static getParentFlowsArrayFromCurrentSection(state) {
     const questionFlowsFromCurrentSection: QuestionFlow[] = [];
 
-    state.currentSection.questionFlows.forEach(questionFlow => {
+    state.sections[state.currentSection].questionFlows.forEach(questionFlow => {
       questionFlowsFromCurrentSection.push(
         state.questionFlows.questionFlows[+questionFlow]
       );
@@ -55,7 +55,7 @@ export class SectionsState {
   static getQuestionFlowsArrayFromCurrentSection(state) {
     const questionFlowsFromCurrentSection: QuestionFlow[] = [];
 
-    state.currentSection.questionFlows.forEach(questionFlow => {
+    state.sections[state.currentSection].questionFlows.forEach(questionFlow => {
       questionFlowsFromCurrentSection.push(
         state.questionFlows.questionFlows[+questionFlow]
       );
@@ -94,6 +94,7 @@ export class SectionsState {
     ctx: StateContext<SectionsStateModel>,
     action: SectionsActions.SetCurrentSection
   ) {
+    console.log('Setting current state');
     ctx.patchState({
       currentSection: action.section
     });
@@ -104,6 +105,7 @@ export class SectionsState {
     ctx: StateContext<SectionsStateModel>,
     action: SectionsActions.UpdateCompletedQuestions
   ) {
+    console.log('Setting state');
     const state = ctx.getState();
     if (action.questionFlow.questionFlows.length > 0) {
       let nChildQuestionFlows = 0;
@@ -118,8 +120,8 @@ export class SectionsState {
             // If questionFlow has children, committed answer is different from current, it opens the subs and parent wasn't answered yet.
             ctx.setState(
               produce(ctx.getState(), draft => {
-                draft.sections[state.currentSection.id].completedQuestions =
-                  state.currentSection.completedQuestions -
+                draft.sections[state.currentSection].completedQuestions =
+                  state.sections[state.currentSection].completedQuestions -
                   nChildQuestionFlows +
                   1;
               })
@@ -128,8 +130,9 @@ export class SectionsState {
             // If questionFlow has children, committed answer is different from current, it opens the subs and parent was answered.
             ctx.setState(
               produce(ctx.getState(), draft => {
-                draft.sections[state.currentSection.id].completedQuestions =
-                  state.currentSection.completedQuestions - nChildQuestionFlows;
+                draft.sections[state.currentSection].completedQuestions =
+                  state.sections[state.currentSection].completedQuestions -
+                  nChildQuestionFlows;
               })
             );
           }
@@ -138,8 +141,8 @@ export class SectionsState {
             // If questionFlow has childeren, committed answer id different from current, it closes the subs and parent wasn't answered yet.
             ctx.setState(
               produce(ctx.getState(), draft => {
-                draft.sections[state.currentSection.id].completedQuestions =
-                  state.currentSection.completedQuestions +
+                draft.sections[state.currentSection].completedQuestions =
+                  state.sections[state.currentSection].completedQuestions +
                   nChildQuestionFlows +
                   1;
               })
@@ -148,8 +151,9 @@ export class SectionsState {
             // If questionFlow has childeren, committed answer id different from current, it closes the subs and parent was answered.
             ctx.setState(
               produce(ctx.getState(), draft => {
-                draft.sections[state.currentSection.id].completedQuestions =
-                  state.currentSection.completedQuestions + nChildQuestionFlows;
+                draft.sections[state.currentSection].completedQuestions =
+                  state.sections[state.currentSection].completedQuestions +
+                  nChildQuestionFlows;
               })
             );
           }
@@ -159,17 +163,11 @@ export class SectionsState {
       // If questionFlow doesn't have children and wasn't completed yet.
       ctx.setState(
         produce(ctx.getState(), draft => {
-          draft.sections[state.currentSection.id].completedQuestions =
-            state.currentSection.completedQuestions + 1;
+          draft.sections[state.currentSection].completedQuestions =
+            state.sections[state.currentSection].completedQuestions + 1;
         })
       );
     }
-
-    ctx.dispatch(
-      new SectionsActions.SetCurrentSection(
-        state.sections[state.currentSection.id]
-      )
-    );
   }
   //#endregion Reducer
 }

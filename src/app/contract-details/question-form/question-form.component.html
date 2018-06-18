@@ -1,4 +1,4 @@
-<div *ngIf="questionFlow$ | async; let questionFlow;" class="row">
+<div *ngIf="questionFlow$ | async;" class="row">
   <p>{{questionFlow.question}}</p>
   <form *ngIf="questionFlow.type === 'Boolean'" #form="ngForm" (ngSubmit)="setAnswer(form)">
     <input type="radio" id="true" name="choice" value="true" [ngModel]="questionFlow.answer">

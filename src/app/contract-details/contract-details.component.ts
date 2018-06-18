@@ -18,9 +18,9 @@ export class ContractDetailsComponent implements OnInit {
   @Select(SectionsState.getSectionsArray) sections$: Observable<Section[]>;
   @Select(SectionsState.getQuestionFlowsArrayFromCurrentSection)
   questionFlows$: Observable<QuestionFlow[]>;
-  @Select(SectionsState.getCurrentSection) currSection$: Observable<Section>;
+  @Select(SectionsState.getCurrentSection) currSection$: Observable<number>;
   @Select(QuestionFlowsState.getCurrentQuestionFlow)
-  currQuestionFlow$: Observable<QuestionFlow>;
+  currQuestionFlow$: Observable<number>;
 
   currentSection: Section;
   currentQuestionFlow: QuestionFlow;
@@ -30,38 +30,36 @@ export class ContractDetailsComponent implements OnInit {
   constructor(private store: Store) {}
 
   ngOnInit() {
-    this.currSection$.subscribe(section => {
-      this.currentSection = section;
-    });
-
-    this.currQuestionFlow$.subscribe(questionFlow => {
-      this.currentQuestionFlow = questionFlow;
+    let firstSection: Section;
+    this.sections$.subscribe(sections => {
+      this.sections = sections;
+      firstSection = sections[0];
     });
 
     this.questionFlows$.subscribe(questionFlows => {
       this.questionFlows = questionFlows;
     });
 
-    this.sections$.subscribe(sections => {
-      this.sections = sections;
-    });
-
-    this.setInitialSelection();
+    this.setInitialSelection(firstSection);
   }
 
-  setInitialSelection() {
-    let section: Section;
-    this.sections$.subscribe(sections => {
-      section = sections[0];
-    });
-    this.store.dispatch(new SectionActions.SetCurrentSection(section));
-    let questionFlow: QuestionFlow;
-    this.questionFlows$.subscribe(flow => {
-      questionFlow = flow[0];
-    });
+  setInitialSelection(firstSection: Section) {
+    this.store.dispatch(new SectionActions.SetCurrentSection(firstSection.id));
     this.store.dispatch(
-      new QuestionFlowActions.SetCurrentQuestionFlow(questionFlow)
+      new QuestionFlowActions.SetCurrentQuestionFlow(
+        +firstSection.questionFlows[0]
+      )
     );
+
+    this.currSection$.subscribe(section => {
+      this.currentSection = this.sections[section];
+    });
+
+    this.currQuestionFlow$.subscribe(questionFlow => {
+      this.currentQuestionFlow = this.questionFlows.find(
+        array => array.id === questionFlow
+      );
+    });
   }
 
   nextQuestion() {
@@ -74,7 +72,7 @@ export class ContractDetailsComponent implements OnInit {
           flow => +flow.path === +this.currentQuestionFlow.path + 0.1
         );
         this.store.dispatch(
-          new QuestionFlowActions.SetCurrentQuestionFlow(nextQuestionFlow)
+          new QuestionFlowActions.SetCurrentQuestionFlow(nextQuestionFlow.id)
         );
       } else {
         if (
@@ -86,14 +84,14 @@ export class ContractDetailsComponent implements OnInit {
             flow => +flow.path === +this.currentQuestionFlow.path + 1
           );
           this.store.dispatch(
-            new QuestionFlowActions.SetCurrentQuestionFlow(nextQuestionFlow)
+            new QuestionFlowActions.SetCurrentQuestionFlow(nextQuestionFlow.id)
           );
         } else {
           const nextSection = this.sections.find(
             section => section.sequence === this.currentSection.sequence + 1
           );
           this.store.dispatch(
-            new SectionActions.SetCurrentSection(nextSection)
+            new SectionActions.SetCurrentSection(nextSection.id)
           );
         }
       }
@@ -110,14 +108,14 @@ export class ContractDetailsComponent implements OnInit {
               +questionFlow.path === +this.currentQuestionFlow.path + 1
           );
           this.store.dispatch(
-            new QuestionFlowActions.SetCurrentQuestionFlow(nextQuestionFlow)
+            new QuestionFlowActions.SetCurrentQuestionFlow(nextQuestionFlow.id)
           );
         } else {
           const nextSection = this.sections.find(
             section => section.sequence === this.currentSection.sequence + 1
           );
           this.store.dispatch(
-            new SectionActions.SetCurrentSection(nextSection)
+            new SectionActions.SetCurrentSection(nextSection.id)
           );
         }
       } else if (
@@ -133,7 +131,7 @@ export class ContractDetailsComponent implements OnInit {
             (+this.currentQuestionFlow.path + 0.1).toFixed(2)
         );
         this.store.dispatch(
-          new QuestionFlowActions.SetCurrentQuestionFlow(nextQuestionFlow)
+          new QuestionFlowActions.SetCurrentQuestionFlow(nextQuestionFlow.id)
         );
       } else if (
         this.questionFlows.find(
@@ -148,13 +146,15 @@ export class ContractDetailsComponent implements OnInit {
             Math.floor(+this.currentQuestionFlow.path) + 1
         );
         this.store.dispatch(
-          new QuestionFlowActions.SetCurrentQuestionFlow(nextQuestionFlow)
+          new QuestionFlowActions.SetCurrentQuestionFlow(nextQuestionFlow.id)
         );
       } else {
         const nextSection = this.sections.find(
           section => section.sequence === this.currentSection.sequence + 1
         );
-        this.store.dispatch(new SectionActions.SetCurrentSection(nextSection));
+        this.store.dispatch(
+          new SectionActions.SetCurrentSection(nextSection.id)
+        );
       }
     }
   }
@@ -194,14 +194,14 @@ export class ContractDetailsComponent implements OnInit {
             flow => +flow.path === highestPath
           );
           this.store.dispatch(
-            new QuestionFlowActions.SetCurrentQuestionFlow(nextQuestionFlow)
+            new QuestionFlowActions.SetCurrentQuestionFlow(nextQuestionFlow.id)
           );
         } else {
           const nextQuestionFlow = this.questionFlows.find(
             flow => +flow.path === +this.currentQuestionFlow.path - 1
           );
           this.store.dispatch(
-            new QuestionFlowActions.SetCurrentQuestionFlow(nextQuestionFlow)
+            new QuestionFlowActions.SetCurrentQuestionFlow(nextQuestionFlow.id)
           );
         }
       } else if (
@@ -212,7 +212,9 @@ export class ContractDetailsComponent implements OnInit {
         const nextSection = this.sections.find(
           section => section.sequence === this.currentSection.sequence - 1
         );
-        this.store.dispatch(new SectionActions.SetCurrentSection(nextSection));
+        this.store.dispatch(
+          new SectionActions.SetCurrentSection(nextSection.id)
+        );
 
         let nextQuestionFlow = this.questionFlows[
           this.questionFlows.length - 1
@@ -232,7 +234,7 @@ export class ContractDetailsComponent implements OnInit {
           }
         }
         this.store.dispatch(
-          new QuestionFlowActions.SetCurrentQuestionFlow(nextQuestionFlow)
+          new QuestionFlowActions.SetCurrentQuestionFlow(nextQuestionFlow.id)
         );
       }
     } else {
@@ -242,7 +244,7 @@ export class ContractDetailsComponent implements OnInit {
           (+this.currentQuestionFlow.path - 0.1).toFixed(2)
       );
       this.store.dispatch(
-        new QuestionFlowActions.SetCurrentQuestionFlow(nextQuestionFlow)
+        new QuestionFlowActions.SetCurrentQuestionFlow(nextQuestionFlow.id)
       );
     }
   }

@@ -1,6 +1,6 @@
 <div>
   <ol>
-    <li *ngFor="let section of sections$ | async" class="list-group-item" (click)="openQuestionFlows(section)" [ngClass]="{'active': section.id === (currentSection$ | async)?.id}">
+    <li *ngFor="let section of sections$ | async" class="list-group-item" (click)="openQuestionFlows(section)" [ngClass]="{'active': section.id === (currentSection$ | async)}">
       <div class="row">
         <div class="col">
           <div class="progress">

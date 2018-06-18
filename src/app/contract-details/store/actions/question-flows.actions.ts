@@ -3,7 +3,7 @@ import { Section, QuestionFlow } from '../../contract-details.model';
 export class SetCurrentQuestionFlow {
   static readonly type = '[QUESTION FLOW] Set current question flow';
 
-  constructor(public questionFlow: QuestionFlow) {}
+  constructor(public questionFlow: number) {}
 }
 
 export class SetAnswer {
