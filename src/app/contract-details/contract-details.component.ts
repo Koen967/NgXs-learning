@@ -18,9 +18,9 @@ export class ContractDetailsComponent implements OnInit {
   @Select(SectionsState.getSectionsArray) sections$: Observable<Section[]>;
   @Select(SectionsState.getQuestionFlowsArrayFromCurrentSection)
   questionFlows$: Observable<QuestionFlow[]>;
-  @Select(SectionsState.getCurrentSection) currSection$: Observable<number>;
+  @Select(SectionsState.getCurrentSection) currSection$: Observable<Section>;
   @Select(QuestionFlowsState.getCurrentQuestionFlow)
-  currQuestionFlow$: Observable<number>;
+  currQuestionFlow$: Observable<QuestionFlow>;
 
   currentSection: Section;
   currentQuestionFlow: QuestionFlow;
@@ -52,13 +52,11 @@ export class ContractDetailsComponent implements OnInit {
     );
 
     this.currSection$.subscribe(section => {
-      this.currentSection = this.sections[section];
+      this.currentSection = section;
     });
 
     this.currQuestionFlow$.subscribe(questionFlow => {
-      this.currentQuestionFlow = this.questionFlows.find(
-        array => array.id === questionFlow
-      );
+      this.currentQuestionFlow = questionFlow;
     });
   }
 

@@ -1,7 +1,7 @@
 <div>
   <ol>
     <li *ngFor="let questionFlow of parentFlows" class="list-group-item" (click)="$event.stopPropagation();openQuestionFlowForm(questionFlow)"
-      [ngClass]="{'active': questionFlow.id === (currentQuestionFlow$ | async)}">
+      [ngClass]="{'active': questionFlow.id === (currentQuestionFlow$ | async)?.id}">
       <div class="row alert" [ngClass]="{'alert-success': questionFlow.completed === true, 'alert-danger': questionFlow.completed === false}">
         <div class="col">
           <p>{{questionFlow.question}}</p>
