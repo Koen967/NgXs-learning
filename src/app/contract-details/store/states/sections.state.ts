@@ -35,7 +35,7 @@ export class SectionsState {
 
   @Selector()
   static getCurrentSection(state: SectionsStateModel) {
-    return state.currentSection;
+    return state.sections[state.currentSection];
   }
 
   @Selector()
@@ -94,7 +94,6 @@ export class SectionsState {
     ctx: StateContext<SectionsStateModel>,
     action: SectionsActions.SetCurrentSection
   ) {
-    console.log('Setting current state');
     ctx.patchState({
       currentSection: action.section
     });
@@ -105,7 +104,6 @@ export class SectionsState {
     ctx: StateContext<SectionsStateModel>,
     action: SectionsActions.UpdateCompletedQuestions
   ) {
-    console.log('Setting state');
     const state = ctx.getState();
     if (action.questionFlow.questionFlows.length > 0) {
       let nChildQuestionFlows = 0;

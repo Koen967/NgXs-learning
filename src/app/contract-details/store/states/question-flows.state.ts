@@ -43,7 +43,7 @@ export class QuestionFlowsState {
 
   @Selector()
   static getCurrentQuestionFlow(state: QuestionFlowsStateModel) {
-    return state.currentQuestionFlow;
+    return state.questionFlows[state.currentQuestionFlow];
   }
   //#endregion Selector
 
@@ -57,7 +57,6 @@ export class QuestionFlowsState {
       action.contractDetails,
       contractDetailsSchema
     );
-    console.log('TEST', normalizedData);
     ctx.setState({
       questionFlows: normalizedData.entities.questionFlows,
       currentQuestionFlow: null
@@ -72,7 +71,6 @@ export class QuestionFlowsState {
     ctx.patchState({
       currentQuestionFlow: action.questionFlow
     });
-    console.log('Setting flow');
   }
 
   @Action(QuestionFlowsActions.SetAnswer)

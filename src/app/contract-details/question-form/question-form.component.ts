@@ -14,10 +14,8 @@ import * as QuestionFlowActions from '../store/actions/question-flows.actions';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QuestionFormComponent implements OnInit {
-  @Select(SectionsState.getQuestionFlowsArrayFromCurrentSection)
-  questionFlows$: Observable<QuestionFlow[]>;
   @Select(QuestionFlowsState.getCurrentQuestionFlow)
-  questionFlow$: Observable<number>;
+  questionFlow$: Observable<QuestionFlow>;
 
   questionFlows: QuestionFlow[];
   questionFlow: QuestionFlow;
@@ -25,13 +23,9 @@ export class QuestionFormComponent implements OnInit {
   constructor(private store: Store) {}
 
   ngOnInit() {
-    this.questionFlows$.subscribe(flows => {
-      this.questionFlows = flows;
-    });
     this.questionFlow$.subscribe(flow => {
-      this.questionFlow = this.questionFlows.find(array => array.id === flow);
+      this.questionFlow = flow;
     });
-    console.log('FORM', this.questionFlow);
   }
 
   setAnswer(answer: any) {
