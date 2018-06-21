@@ -2,25 +2,18 @@ import {
   State,
   Action,
   StateContext,
-  Selector,
-  Store,
-  Select
+  Selector
 } from '@ngxs/store';
-import * as ContractDetailsActions from '../actions/contract-details.actions';
-import * as SectionsActions from '../actions/sections.actions';
-import * as QuestionFlowsActions from '../actions/question-flows.actions';
+import * as ContractDetailsActions from '../../store/actions/contract-details.actions';
+import * as SectionsActions from '../../sections/store/sections.actions';
+import * as QuestionFlowsActions from '../../question-flows/store/question-flows.actions';
 
 import {
-  ContractDetail,
   contractDetailsSchema,
-  QuestionFlow,
-  Section
+  QuestionFlow
 } from '../../contract-details.model';
 import { normalize } from 'normalizr';
 import produce from 'immer';
-
-import { ContractDetailsService } from '../../contract-details.service';
-import { SectionsStateModel } from './sections.state';
 
 export class QuestionFlowsStateModel {
   questionFlows: { [id: number]: QuestionFlow };

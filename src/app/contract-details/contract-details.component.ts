@@ -4,8 +4,8 @@ import { QuestionFlowsState, SectionsState } from './store/states';
 import { Observable } from 'rxjs';
 import { QuestionFlow, Section } from './contract-details.model';
 
-import * as QuestionFlowActions from '../contract-details/store/actions/question-flows.actions';
-import * as SectionActions from '../contract-details/store/actions/sections.actions';
+import * as QuestionFlowActions from '../contract-details/question-flows/store/question-flows.actions';
+import * as SectionActions from '../contract-details/sections/store/sections.actions';
 @Component({
   selector: 'app-contract-details',
   templateUrl: './contract-details.component.html',

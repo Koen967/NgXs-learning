@@ -5,7 +5,7 @@ import { Store, Select } from '@ngxs/store';
 import { QuestionFlowsState, SectionsState } from '../store/states';
 import { QuestionFlow } from '../contract-details.model';
 
-import * as QuestionFlowActions from '../store/actions/question-flows.actions';
+import * as QuestionFlowActions from '../question-flows/store/question-flows.actions';
 
 @Component({
   selector: 'app-question-form',

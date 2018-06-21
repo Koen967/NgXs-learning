@@ -3,8 +3,8 @@ import { Observable } from 'rxjs';
 
 import { Store, Select } from '@ngxs/store';
 import { SectionsState, QuestionFlowsState } from '../store/states';
-import * as SectionActions from '../store/actions/sections.actions';
-import * as QuestionFlowActions from '../store/actions/question-flows.actions';
+import * as SectionActions from '../sections/store/sections.actions';
+import * as QuestionFlowActions from '../question-flows/store/question-flows.actions';
 
 import { Section } from '../contract-details.model';
 

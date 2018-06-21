@@ -10,7 +10,7 @@ import { normalize } from 'normalizr';
 import { ContractDetailsService } from '../../contract-details.service';
 import { catchError, map } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { SectionsState } from './sections.state';
+import { SectionsState } from '../../sections/store/sections.state';
 
 export class ContractDetailsStateModel {
   contractDetails: { [id: number]: ContractDetail };

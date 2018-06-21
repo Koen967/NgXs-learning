@@ -1,6 +1,6 @@
 import { State, Action, StateContext, Selector } from '@ngxs/store';
-import * as ContractDetailsActions from '../actions/contract-details.actions';
-import * as SectionsActions from '../actions/sections.actions';
+import * as ContractDetailsActions from '../../store/actions/contract-details.actions';
+import * as SectionsActions from './sections.actions';
 import produce from 'immer';
 
 import {
@@ -10,8 +10,7 @@ import {
 } from '../../contract-details.model';
 import { normalize } from 'normalizr';
 
-import { ContractDetailsService } from '../../contract-details.service';
-import { QuestionFlowsState } from './question-flows.state';
+import { QuestionFlowsState } from '../../question-flows/store/question-flows.state';
 
 export class SectionsStateModel {
   sections: { [id: number]: Section };
